@@ -1,0 +1,31 @@
+version: "3.7"
+services:
+  app:
+    build:
+      context: ./docker/app
+      dockerfile: Dockerfile
+    tty: true
+    volumes:
+      - ./workspace/app:/usr/local/share/app
+    links:
+      - db
+    depends_on:
+      - db
+    ports:
+      - "8081:8080"
+  db:
+    build:
+      context: ./docker/db
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+      TZ: 'Asia/Tokyo'
+    tty: true
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "33060:33060"
+volumes:
+  mysql-data:
